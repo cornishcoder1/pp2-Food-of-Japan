@@ -1,0 +1,122 @@
+@import url('https://fonts.googleapis.com/css2?family=Baloo+Bhaijaan+2&display=swap');
+
+body {
+    background: #3DCF27;
+    font-family: 'Baloo Bhaijaan 2', sans-serif;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+
+
+.heading {
+    text-align: center;
+    color: black;
+    font-size: 1.5rem;
+    padding-bottom: 8rem;
+}
+
+.container {
+    width: 100vw;
+    height: 60vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    max-width: 80rem;
+    margin: 0 auto;
+}
+
+.justify-centre {
+    justify-content: center;
+}
+
+.flex-column {
+    display: flex;
+    flex-direction: column;
+}
+
+
+.choice-container {
+    display:flex;
+    margin-bottom: 0.8rem;
+    width: 100%;
+    border-radius: 4px;
+    background: #EEFF3C;
+    box-shadow: 0px 1px 4px 2px rgb(137,146,32, 0.5);
+    font-size: 3rem;
+    min-width: 80rem;
+}
+
+.choice-container:hover {
+    cursor: pointer;
+    box-shadow: 0 0.4rem 0 rgb(137,146,32, 0.5);
+    transform: scale(1.02);
+    transform: transform 100ms;
+}
+
+.choice-prefix {
+    padding: 2rem 2.5rem;
+    color: black;
+}
+
+.choice-text {
+    padding: 2rem;
+    width: 100%;
+}
+
+#question {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+}
+
+.correct {
+    /*background: linear-gradient(32 deg, rgba(11, 223, 36) 0%, rgba(41, 232, 111)100%);*/
+    background-color: green;
+}
+
+.incorrect {
+    background-color: red;
+}
+
+/* Progress & Score Display*/
+
+#psdisplay {
+    display: flex;
+    justify-content: space-between;
+    padding-bottom: 2rem;
+}
+
+.psdisplay-prefix {
+    text-align: center;
+    font-size: 2rem;
+}
+
+.psdisplay-main-text {
+    text-align: center;
+}
+
+#progressBar {
+    width: 20rem;
+    height: 3rem;
+    border: 0.15rem solid black;
+    /*margin-top: 2rem;*/
+    border-radius: 50px;
+    overflow: hidden;
+}
+
+#progressBarFull {
+    height: 100%;
+    background: rgb(11, 223, 36);
+    width: 0%;
+}
+
+
+@media screen and (max-width: 768px) {
+    .choice-container {
+        min-width: 40rem;
+    }
+}
