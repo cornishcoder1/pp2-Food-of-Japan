@@ -1,3 +1,5 @@
+//Quiz questions, inspired by the YouTube channels 'Abroad in Japan' and 'I will always travel for food'
+
 let questionArray = [
 
     {
@@ -79,6 +81,4 @@ let questionArray = [
         3:"Mitarashi Dango",
         correctAnswer:"2",
     },
-
-
-]  
+];
