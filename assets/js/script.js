@@ -96,5 +96,90 @@ let score = 0;
 let currentQuestion = {};
 let availableQuestions = questionArray;
 let acceptingAnswers = true;
-const correctScore = 25;
+const correctScore = 10;
 const maxQuestions = 10;
+
+//Generate new random question from the question array. Update question progress bar and splice in question. When questions comeplete, save score and load game over page. This function is with help from Brian Design and has been edited to suit this application.
+function getNewQuestion() {
+
+    //If questions exceed the max amount of questions save score to local storage and take the user to the game over page. 
+    if(questionCounter >= maxQuestions) {
+        localStorage.setItem('currentRoundScore', score);
+        return window.location.assign("./game-over.html");
+    }
+
+    //Iterate through questions
+    questionCounter ++;
+
+
+    //Update progress counter and increase width of progress bar div.
+    questionCount.innerText = `Question ${questionCounter} / ${maxQuestions}`;
+    progressBarFull.style.width = `${(questionCounter/maxQuestions)* 100}%`;
+
+
+
+    //Select a random new question from the questions array. 
+    const questionSelector = Math.floor(Math.random() * availableQuestions.length);
+    currentQuestion = availableQuestions[questionSelector];
+    questionText.innerText = currentQuestion.question;
+
+
+    //sort answers by dataset within html
+    answers.forEach(answer => {
+        const number = answer.dataset.number;
+        answer.innerText = currentQuestion[number];
+    });
+
+
+    availableQuestions.splice(questionSelector, 1);
+
+    acceptingAnswers = true;
+}
+
+//Increase score count and change HTML. The "num" parameter will be populated during the foreach iteration of answers with "currentScore". 
+function increaseScore(total) { 
+    score += total;
+    score.innerText = score;
+}
+
+//loop through the array answers, return if acceptingAnswers = false, but if acceptingAnswers = true continue through the function 
+answers.forEach(answer => {
+    answer.addEventListener("click", function sortAnswer(e){
+        if(!acceptingAnswers) return; //if not accepting answers, end the function.
+
+        acceptingAnswers = false; // set accepting answers to false once an answer has been selected.
+        const selectedOption = e.target;
+        const selectedAnswer = selectedOption.dataset.number;
+
+        let classToApply = selectedAnswer == currentQuestion.correctAnswer ? "correct-answer" : "wrong-answer";
+        
+        if(classToApply === "correct-answer") {
+            increaseScore(correctScore);
+        } else {
+            (classToApply === "wrong-answer");
+        }
+        e.preventDefault();
+
+        //Add correct/incorrect and hover class.
+        selectedOption.parentElement.classList.add(classToApply);
+        selectedOption.parentElement.classList.add("answer-hover");
+
+        //Set timeout for quiz to remove classToApply and give speech synthesis time to talk. 
+        setTimeout(() => {
+            selectedOption.parentElement.classList.remove(classToApply);
+            selectedOption.parentElement.classList.remove("answer-hover");
+            getNewQuestion();
+       
+        }, 1200);
+    });
+});
+
+//Function to start quiz game, set starting values to 0, run getNewQuestion function.
+function startQuiz() {
+    questionCounter = 0;
+    score = 0;
+    getNewQuestion();
+    console.log("Quiz has started");
+}
+
+startQuiz();
