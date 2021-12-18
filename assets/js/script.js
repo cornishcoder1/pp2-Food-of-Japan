@@ -85,4 +85,16 @@ let questionArray = [
     },
 ];
   
-  
+const questionText = document.getElementById("question");
+const scoreCount = document.getElementById("score");
+const answers = Array.from(document.getElementsByClassName("answer-text"));
+const questionCount = document.getElementById("question-progress");
+const progressBarFull = document.getElementById("progress-bar-grow");
+
+let questionCounter = 0;
+let score = 0;
+let currentQuestion = {};
+let availableQuestions = questionArray;
+let acceptingAnswers = true;
+const correctScore = 25;
+const maxQuestions = 10;
