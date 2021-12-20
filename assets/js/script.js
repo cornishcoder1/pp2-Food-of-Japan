@@ -1,150 +1,140 @@
-console.log ('hello')
+const question = document.getElementById('question');
+const choices = Array.from(document.getElementsByClassName('answer-text'));
+const progressText = document.getElementById('question-progress');
+const scoreText = document.getElementById('score');
+const progressBarFull = document.getElementById('progressBarFull');
 
-//Quiz questions, inspired by the YouTube channels 'Abroad in Japan' and 'I will always travel for food'
+let currentQuestion = {}
+let acceptingAnswers = true
+let score = 0
+let questionCounter = 0
+let availableQuestions = []
 
-let questionArray = [
+let questions = [
+    {
+        question: 'This dish is a speciality in the region of Gunma, typically consisting of pork tenderloin which is breaded and deep fried.',
+        choice1: 'Menchikatsu',
+        choice2: 'Katsudon',
+        choice3: 'Tonkatsu',
+        answer: 3,
+    },   
 
     {
-        question:"This dish is a speciality in the region of Gunma, typically consisting of pork tenderloin which is breaded and deep fried.",
-        1:"Menchikatsu",
-        2:"Katsudon",
-        3:"Tonkatsu",
-        correctAnswer:"3",
+        question: 'A type of sushi consisting of pressed rice, usually topped with fish.',
+        choice1: 'Sashimi',
+        choice2: 'Nigiri',
+        choice3: 'Maki',
+        answer: 2,
     },
 
     {
-        question:"A type of sushi, consisting of pressed rice usually topped with fish.",
-        1:"Sashimi",
-        2:"Nigiri",
-        3:"Maki",
-        correctAnswer:"2",
+        question: 'These boiled dumplings are usually served in a very light broth, filled with ground meat and vegetables.',
+        choice1: 'Yaki gyoza',
+        choice2: 'Sui gyoza',
+        choice3: 'Age gyoza',
+        answer: 2,
     },
 
     {
-        question:"These boiled dumplings are usually served in a very light broth, filled with ground meat and vegetables.",
-        1:"Yaki gyoza",
-        2:"Sui gyoza",
-        3:"Age gyoza",
-        correctAnswer:"2",
+        question: 'Katsuobushi shavings (or bonito flakes) are derived from which fish?',
+        choice1: 'Tuna',
+        choice2: 'Salmon',
+        choice3: 'Mackerel',
+        answer: 1,
     },
 
     {
-        question:"Katsuobushi shavings (or bonito flakes) are derived from which fish?",
-        1:"Tuna",
-        2:"Salmon",
-        3:"Mackerel",
-        correctAnswer:"1",
+        question: 'What is Japanese horseradish otherwise known as? ',
+        choice1: 'Onigiri',
+        choice2: 'Karaage',
+        choice3: 'Wasabi',
+        answer: 3,
+    },
+
+
+    {
+        question: 'Found all over Japan in street food markets and sushi restaurants, this fried rolled omelette is typically seasoned with salt and dashi.',
+        choice1: 'Tamagoyaki',
+        choice2: 'Datemaki',
+        choice3: 'Okonomiyaki',
+        answer: 1,
+    },
+
+
+    {
+        question: "Which of these Japanese islands is famous for it’s Tarabagani (King Crab)?",
+        choice1: 'Tashiro',
+        choice2: 'Hokkaido',
+        choice3: 'Sado',
+        answer: 2, 
+    
     },
 
     {
-        question:"What is Japanese Horseradish also known as? ",
-        1:"Onigiri",
-        2:"Karaage",
-        3:"Wasabi",
-        correctAnswer:"3",
+        question: 'Which Japanese fruit is said to be one of the most expensive in the world?',
+        choice1: 'Akebi',
+        choice2: 'Momo peach',
+        choice3: 'Yubari melon',
+        answer: 3,
     },
 
     {
-        question:"Found all over Japan in street food markets and sushi restaurants, this fried rolled omelette is typically seasoned with salt and dashi.",
-        1:"Tamagoyaki",
-        2:"Datemaki",
-        3:"Okonomiyaki",
-        correctAnswer:"1",
+        question: "Which variety of beef is identified by it’s fatty, well-marbled texture? ",
+        choice1: 'Yonezawa',
+        choice2: 'Mishima',
+        choice3: 'Kobe',
+        answer: 3,
     },
 
     {
-        question:"Which of these Japanese islands is famous for it’s Tarabagani (King Crab)?",
-        1:"Tashiro",
-        2:"Hokkaido",
-        3:"Sado",
-        correctAnswer:"2",
-    },
-
-    {
-        question:"Which Japanese fruit is said to be one of the most expensive in the world?",
-        1:"Akebi",
-        2:"Momo peach",
-        3:"Yubari melon",
-        correctAnswer:"3",
-    },
-
-    {
-        question:"Which variety of beef is identified by it’s fatty, well-marbled texture?",
-        1:"Yonezawa",
-        2:"Mishima",
-        3:"Kobe",
-        correctAnswer:"3",
-    },
-
-    {
-        question:"What fish-shaped pancake is traditionally filled with sweetened adzuki beans? ",
-        1:"Zabuton Dora",
-        2:"Taiyaki",
-        3:"Mitarashi Dango",
-        correctAnswer:"2",
-    },
-];
-  
-const questionText = document.getElementById("question");
-const scoreCount = document.getElementById("score");
-const answers = Array.from(document.getElementsByClassName("answer-text"));
-const questionCount = document.getElementById("question-progress");
-const progressBarFull = document.getElementById("progress-bar-grow");
-
-let questionCounter = 0;
-let score = 0;
-let currentQuestion = {};
-let availableQuestions = questionArray;
-let acceptingAnswers = true;
-const correctScore = 10;
-const maxQuestions = 10;
-
-//Generate new random question from the question array. Update question progress bar and splice in question. When questions comeplete, save score and load game over page. This function is with help from Brian Design and has been edited to suit this application.
-function getNewQuestion() {
-
-    //If questions exceed the max amount of questions save score to local storage and take the user to the game over page. 
-    if(questionCounter >= maxQuestions) {
-        localStorage.setItem('currentRoundScore', score);
-        return window.location.assign("./game-over.html");
+        question: 'What fish-shaped pancake is traditionally filled with sweetened adzuki beans? ',
+        choice1: 'Zabuton Dora',
+        choice2: 'Taiyaki',
+        choice3: 'Mitarashi Dango',
+        answer: 2,
+    
+    
     }
 
-    //Iterate through questions
-    questionCounter ++;
+]
 
+const SCORE_POINTS = 100
+const MAX_QUESTIONS = 10
 
-    //Update progress counter and increase width of progress bar div.
-    questionCount.innerText = `Question ${questionCounter} / ${maxQuestions}`;
-    progressBarFull.style.width = `${(questionCounter/maxQuestions)* 100}%`;
-
-
-
-    //Select a random new question from the questions array. 
-    const questionSelector = Math.floor(Math.random() * availableQuestions.length);
-    currentQuestion = availableQuestions[questionSelector];
-    questionText.innerText = currentQuestion.question;
-
-
-    //sort answers by dataset within html
-    answers.forEach(answer => {
-        const number = answer.dataset.number;
-        answers.innerText = currentQuestion[number];
-    });
-
-
-    availableQuestions.splice(questionSelector, 1);
-
-    acceptingAnswers = true;
+startGame = () => {
+    questionCounter = 0
+    score = 0
+    availableQuestions = [...questions]
+    getNewQuestion()
 }
 
-//Increase score count and change HTML. The "num" parameter will be populated during the foreach iteration of answers with "currentScore". 
-//function increaseScore(total) { 
-  //  score += total;
-    //score.innerText = score;
-//}
+getNewQuestion = () => {
+    if(availableQuestions.length === 0 || questionCounter > MAX_QUESTIONS) {
+        localStorage.setItem('mostRecentScore', score)
 
-//loop through the array answers, return if acceptingAnswers = false, but if acceptingAnswers = true continue through the function 
-answers.forEach(choice => {
-    answer.addEventListener('click', e => {
+        return window.location.assign('/end.html')
+    }
+
+    questionCounter++
+    progressText.innerText = `Question ${questionCounter} of ${MAX_QUESTIONS}`
+    progressBarFull.style.width = `${(questionCounter/MAX_QUESTIONS) * 100}%`
+    
+    const questionsIndex = Math.floor(Math.random() * availableQuestions.length)
+    currentQuestion = availableQuestions[questionsIndex]
+    question.innerText = currentQuestion.question
+
+    choices.forEach(choice => {
+        const number = choice.dataset['number']
+        choice.innerText = currentQuestion['choice' + number]
+    })
+
+    availableQuestions.splice(questionsIndex, 1)
+
+    acceptingAnswers = true
+}
+
+choices.forEach(choice => {
+    choice.addEventListener('click', e => {
         if(!acceptingAnswers) return
 
         acceptingAnswers = false
@@ -154,7 +144,7 @@ answers.forEach(choice => {
         let classToApply = selectedAnswer == currentQuestion.answer ? 'correct' : 'incorrect'
 
         if(classToApply === 'correct') {
-            incrementScore(correctScore)
+            incrementScore(SCORE_POINTS)
         }
 
         selectedChoice.parentElement.classList.add(classToApply)
@@ -167,12 +157,9 @@ answers.forEach(choice => {
     })
 })
 
-//Function to start quiz game, set starting values to 0, run getNewQuestion function.
-function startQuiz() {
-    questionCounter = 0;
-    score = 0;
-    getNewQuestion();
-    console.log("Quiz has started");
+incrementScore = num => {
+    score +=num
+    scoreText.innerText = score
 }
 
-startQuiz();
+startGame()

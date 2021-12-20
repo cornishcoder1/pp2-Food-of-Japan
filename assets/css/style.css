@@ -108,7 +108,7 @@ body {
     overflow: hidden;
 }
 
-#progress-bar-grow {
+#progressBarFull {
     height: 100%;
     background: #FF3870;
     width: 0%;
