@@ -10,7 +10,7 @@ let score = 0
 let questionCounter = 0
 let availableQuestions = []
 
-let questions = [
+let questionsArray = [
     {
         question: 'This dish is a speciality in the region of Gunma, typically consisting of pork tenderloin which is breaded and deep fried.',
         choice1: 'Menchikatsu',
@@ -104,7 +104,7 @@ const MAX_QUESTIONS = 10
 startGame = () => {
     questionCounter = 0
     score = 0
-    availableQuestions = [...questions]
+    availableQuestions = [...questionsArray]
     getNewQuestion()
 }
 
