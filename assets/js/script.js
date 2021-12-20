@@ -127,7 +127,7 @@ function getNewQuestion() {
     //sort answers by dataset within html
     answers.forEach(answer => {
         const number = answer.dataset.number;
-        answer.innerText = currentQuestion[number];
+        answers.innerText = currentQuestion[number];
     });
 
 
@@ -137,42 +137,35 @@ function getNewQuestion() {
 }
 
 //Increase score count and change HTML. The "num" parameter will be populated during the foreach iteration of answers with "currentScore". 
-function increaseScore(total) { 
-    score += total;
-    score.innerText = score;
-}
+//function increaseScore(total) { 
+  //  score += total;
+    //score.innerText = score;
+//}
 
 //loop through the array answers, return if acceptingAnswers = false, but if acceptingAnswers = true continue through the function 
-answers.forEach(answer => {
-    answer.addEventListener("click", function sortAnswer(e){
-        if(!acceptingAnswers) return; //if not accepting answers, end the function.
+answers.forEach(choice => {
+    answer.addEventListener('click', e => {
+        if(!acceptingAnswers) return
 
-        acceptingAnswers = false; // set accepting answers to false once an answer has been selected.
-        const selectedOption = e.target;
-        const selectedAnswer = selectedOption.dataset.number;
+        acceptingAnswers = false
+        const selectedChoice = e.target
+        const selectedAnswer = selectedChoice.dataset['number']
 
-        let classToApply = selectedAnswer == currentQuestion.correctAnswer ? "correct-answer" : "wrong-answer";
-        
-        if(classToApply === "correct-answer") {
-            increaseScore(correctScore);
-        } else {
-            (classToApply === "wrong-answer");
+        let classToApply = selectedAnswer == currentQuestion.answer ? 'correct' : 'incorrect'
+
+        if(classToApply === 'correct') {
+            incrementScore(correctScore)
         }
-        e.preventDefault();
 
-        //Add correct/incorrect and hover class.
-        selectedOption.parentElement.classList.add(classToApply);
-        selectedOption.parentElement.classList.add("answer-hover");
+        selectedChoice.parentElement.classList.add(classToApply)
 
-        //Set timeout for quiz to remove classToApply and give speech synthesis time to talk. 
         setTimeout(() => {
-            selectedOption.parentElement.classList.remove(classToApply);
-            selectedOption.parentElement.classList.remove("answer-hover");
-            getNewQuestion();
-       
-        }, 1200);
-    });
-});
+            selectedChoice.parentElement.classList.remove(classToApply)
+            getNewQuestion()
+
+        }, 1000)
+    })
+})
 
 //Function to start quiz game, set starting values to 0, run getNewQuestion function.
 function startQuiz() {
