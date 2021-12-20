@@ -98,7 +98,7 @@ let questionsArray = [
 
 ]
 
-const SCORE_POINTS = 100
+const SCORE_POINTS = 10
 const MAX_QUESTIONS = 10
 
 startGame = () => {
@@ -153,7 +153,7 @@ choices.forEach(choice => {
             selectedChoice.parentElement.classList.remove(classToApply)
             getNewQuestion()
 
-        }, 1000)
+        }, 100)
     })
 })
 
